@@ -1,0 +1,27 @@
+const apiUrl = '/api/tasks';
+
+function fetchTasks() {
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(tasks => {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = `${task.title} - ${task.completed ? 'Done' : 'Pending'}`;
+                taskList.appendChild(li);
+            });
+        });
+}
+
+function addTask() {
+    const input = document.getElementById('taskInput');
+    const title = input.value;
+    fetch(apiUrl + '?title=' + title, { method: 'POST' })
+        .then(() => {
+            input.value = '';
+            fetchTasks();
+        });
+}
+
+fetchTasks();
